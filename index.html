@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Calendario de Adviento</title>
+  <title>Fotos Aleatorias sin Repetición</title>
   <script>
     const urls = [
       "https://drive.google.com/file/d/15TWaXR_g1xqtusRXHwi6zZi8eIi1m6FA/view?usp=drivesdk",
@@ -11,17 +11,26 @@
       "https://drive.google.com/file/d/1rLoKsanJau6-hg_3X0XMzxvJzzVpuzWd/view?usp=drivesdk"
     ];
 
-    // Lee la posición actual guardada en el navegador del teléfono
-    let currentIndex = parseInt(localStorage.getItem('adviento_paso') || '0', 10);
+    // Carga las fotos pendientes de ver desde la memoria local
+    let pendientes = JSON.parse(localStorage.getItem('fotos_pendientes') || '[]');
 
-    // Selecciona la foto que le toca ver
-    const targetUrl = urls[currentIndex % urls.length];
+    // Si la lista está vacía o es la primera visita, recarga las 4 fotos
+    if (!Array.isArray(pendientes) || pendientes.length === 0) {
+      pendientes = urls.map((_, index) => index);
+    }
 
-    // Guarda el turno de la siguiente foto para la próxima visita
-    localStorage.setItem('adviento_paso', currentIndex + 1);
+    // Elige un índice totalmente aleatorio dentro de las fotos pendientes
+    const posAleatoria = Math.floor(Math.random() * pendientes.length);
+    const fotoSeleccionada = pendientes[posAleatoria];
 
-    // Redirige inmediatamente
-    window.location.replace(targetUrl);
+    // Elimina la foto seleccionada del grupo para no repetirla
+    pendientes.splice(posAleatoria, 1);
+
+    // Guarda las restantes para los siguientes escaneos
+    localStorage.setItem('fotos_pendientes', JSON.stringify(pendientes));
+
+    // Redirige a la foto obtenida
+    window.location.replace(urls[fotoSeleccionada]);
   </script>
 </head>
 <body></body>
