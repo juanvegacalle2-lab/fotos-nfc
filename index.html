@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Visor de Fotos y Vídeos</title>
+  <title>Visor de Contenido</title>
   <style>
     * {
       margin: 0;
@@ -24,7 +24,8 @@
   </style>
 </head>
 <body>
-  <iframe id="visor" src="" allow="autoplay"></iframe>
+
+  <iframe id="visor" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>
 
   <script>
     const urls = [
@@ -70,13 +71,8 @@
       "https://drive.google.com/file/d/11QRAkuR3QI97rjXL2q3Ij71fooGeYAEI/view?usp=drivesdk"
     ];
 
-    // Transforma el enlace para incrustar el reproductor/visor de Google Drive
-    function obtenerEnlacePreview(urlDrive) {
-      const id = urlDrive.split('/d/')[1].split('/')[0];
-      return "https://drive.google.com/file/d/" + id + "/preview";
-    }
-
-    let pendientes = JSON.parse(localStorage.getItem('fotos_pendientes') || '[]');
+    const STORAGE_KEY = 'fotos_pendientes_v40';
+    let pendientes = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
 
     if (!Array.isArray(pendientes) || pendientes.length === 0) {
       pendientes = urls.map((_, index) => index);
@@ -86,10 +82,10 @@
     const archivoSeleccionado = pendientes[posAleatoria];
 
     pendientes.splice(posAleatoria, 1);
-    localStorage.setItem('fotos_pendientes', JSON.stringify(pendientes));
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(pendientes));
 
-    // Carga el visor incrustado en pantalla completa
-    document.getElementById('visor').src = obtenerEnlacePreview(urls[archivoSeleccionado]);
+    const fileId = urls[archivoSeleccionado].split('/d/')[1].split('/')[0];
+    document.getElementById('visor').src = "https://drive.google.com/file/d/" + fileId + "/preview";
   </script>
 </body>
 </html>
