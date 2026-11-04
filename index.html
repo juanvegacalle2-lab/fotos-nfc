@@ -27,7 +27,7 @@
   </style>
 </head>
 <body>
-  <img id="imagen" src="" alt="Cargando...">
+  <img id="imagen" src="" alt="Cargando foto...">
 
   <script>
     const urls = [
@@ -73,7 +73,7 @@
       "https://drive.google.com/file/d/11QRAkuR3QI97rjXL2q3Ij71fooGeYAEI/view?usp=drivesdk"
     ];
 
-    // Transforma la URL de Drive en un enlace directo de imagen pura
+    // Convierte la URL estándar de Drive en la URL directa del archivo de imagen
     function obtenerEnlaceDirecto(urlDrive) {
       const id = urlDrive.split('/d/')[1].split('/')[0];
       return "https://lh3.googleusercontent.com/d/" + id;
@@ -91,7 +91,7 @@
     pendientes.splice(posAleatoria, 1);
     localStorage.setItem('fotos_pendientes', JSON.stringify(pendientes));
 
-    // Carga la imagen directamente en la página web sobre fondo negro
+    // Carga la foto elegida directamente en pantalla completa
     document.getElementById('imagen').src = obtenerEnlaceDirecto(urls[fotoSeleccionada]);
   </script>
 </body>
