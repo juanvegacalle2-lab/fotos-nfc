@@ -1,8 +1,34 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
   <meta charset="utf-8">
-  <title>Fotos Aleatorias sin Repetición</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Visor de Fotos</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      background-color: #000;
+    }
+    body, html {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    img {
+      max-width: 100%;
+      max-height: 100vh;
+      object-fit: contain;
+    }
+  </style>
+</head>
+<body>
+  <img id="imagen" src="" alt="Cargando...">
+
   <script>
     const urls = [
       "https://drive.google.com/file/d/15TWaXR_g1xqtusRXHwi6zZi8eIi1m6FA/view?usp=drivesdk",
@@ -47,27 +73,26 @@
       "https://drive.google.com/file/d/11QRAkuR3QI97rjXL2q3Ij71fooGeYAEI/view?usp=drivesdk"
     ];
 
-    // Carga las fotos pendientes de ver desde la memoria local
+    // Transforma la URL de Drive en un enlace directo de imagen pura
+    function obtenerEnlaceDirecto(urlDrive) {
+      const id = urlDrive.split('/d/')[1].split('/')[0];
+      return "https://lh3.googleusercontent.com/d/" + id;
+    }
+
     let pendientes = JSON.parse(localStorage.getItem('fotos_pendientes') || '[]');
 
-    // Si la lista está vacía o es la primera visita, carga las 40 fotos
     if (!Array.isArray(pendientes) || pendientes.length === 0) {
       pendientes = urls.map((_, index) => index);
     }
 
-    // Elige una foto aleatoria dentro de las pendientes
     const posAleatoria = Math.floor(Math.random() * pendientes.length);
     const fotoSeleccionada = pendientes[posAleatoria];
 
-    // Elimina la foto seleccionada para no repetirla
     pendientes.splice(posAleatoria, 1);
-
-    // Guarda las pendientes restantes para la siguiente visita
     localStorage.setItem('fotos_pendientes', JSON.stringify(pendientes));
 
-    // Redirige a la foto seleccionada
-    window.location.replace(urls[fotoSeleccionada]);
+    // Carga la imagen directamente en la página web sobre fondo negro
+    document.getElementById('imagen').src = obtenerEnlaceDirecto(urls[fotoSeleccionada]);
   </script>
-</head>
-<body></body>
+</body>
 </html>
